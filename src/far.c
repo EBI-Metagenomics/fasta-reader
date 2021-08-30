@@ -1,6 +1,6 @@
 #include "far/far.h"
 #include "fsm.h"
-#include "prof.h"
+#include "tgt.h"
 #include "tok.h"
 
 void far_init(struct far *far, FILE *restrict fd)
@@ -11,14 +11,9 @@ void far_init(struct far *far, FILE *restrict fd)
     tok_init(&far->tok, far->error);
 }
 
-enum far_rc far_next_prof(struct far *far, struct far_prof *prof)
+enum far_rc far_next_tgt(struct far *far, struct far_tgt *tgt)
 {
-    return prof_next_prof(prof, far->fd, &far->aux, &far->state, &far->tok);
-}
-
-enum far_rc far_next_node(struct far *far, struct far_prof *prof)
-{
-    return prof_next_node(prof, far->fd, &far->aux, &far->state, &far->tok);
+    return tgt_next(tgt, far->fd, &far->aux, &far->state, &far->tok);
 }
 
 void far_clear_error(struct far *far) { far->error[0] = '\0'; }

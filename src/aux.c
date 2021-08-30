@@ -4,11 +4,8 @@
 
 void aux_init(struct far_aux *aux)
 {
-    aux->prof.begin = NULL;
-    aux->prof.pos = NULL;
-    aux->prof.end = NULL;
-    aux->node.begin = NULL;
-    aux->node.pos = NULL;
-    aux->node.end = NULL;
-    aux->idx = 0;
+    aux->begin = NULL;
+    aux->pos = NULL;
+    aux->end = NULL;
+    aux->id[0] = '\0';
 }

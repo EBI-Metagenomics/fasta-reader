@@ -12,7 +12,7 @@ static enum far_rc next_line(FILE *restrict fd, char error[FAR_ERROR_SIZE],
 
 void tok_init(struct far_tok *tok, char *error)
 {
-    tok->id = FAR_TOK_NEWLINE;
+    tok->id = FAR_TOK_NL;
     tok->value = tok->line.data;
     memset(tok->line.data, '\0', FAR_TOK_LINE_MAX);
     tok->line.number = 0;
@@ -47,17 +47,13 @@ enum far_rc tok_next(struct far_tok *tok, FILE *restrict fd)
         tok->value = strtok_r(NULL, DELIM, &tok->line.ctx);
 
     if (!strcmp(tok->value, "\n"))
-        tok->id = FAR_TOK_NEWLINE;
-    else if (!strcmp(tok->value, "//"))
-        tok->id = FAR_TOK_SLASH;
-    else if (!strcmp(tok->value, "HMM"))
-        tok->id = FAR_TOK_HMM;
-    else if (!strcmp(tok->value, "COMPO"))
-        tok->id = FAR_TOK_COMPO;
+        tok->id = FAR_TOK_NL;
+    else if (*tok->value == '>')
+        tok->id = FAR_TOK_ID;
     else
         tok->id = FAR_TOK_WORD;
 
-    tok->line.consumed = tok->id == FAR_TOK_NEWLINE;
+    tok->line.consumed = tok->id == FAR_TOK_NL;
 
     return FAR_SUCCESS;
 }

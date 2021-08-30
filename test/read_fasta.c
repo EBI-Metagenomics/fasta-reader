@@ -1,6 +1,8 @@
 #include "far/far.h"
 #include "hope/hope.h"
 
+#define FILEPATH "/Users/horta/data/mix.faa"
+
 #if 0
 void test_hmm_3profs(void);
 void test_hmm_empty(void);

@@ -3,8 +3,7 @@
 
 enum far_rc
 {
-    FAR_SUCCESS = 0,
-    FAR_ENDNODE,
+    FAR_SUCCESS,
     FAR_ENDFILE,
     FAR_IOERROR,
     FAR_RUNTIMEERROR,

@@ -20,10 +20,9 @@ add_library(
   src/aux.c
   src/bug.c
   src/error.c
-  src/fsm.c
   src/far.c
-  src/node.c
-  src/prof.c
+  src/fsm.c
+  src/tgt.c
   src/tok.c)
 add_library(FAR::far ALIAS far)
 

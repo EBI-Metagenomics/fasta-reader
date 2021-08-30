@@ -4,12 +4,10 @@
 #include "far/aux.h"
 #include "far/error.h"
 #include "far/export.h"
-#include "far/node.h"
-#include "far/prof.h"
 #include "far/rc.h"
 #include "far/state.h"
+#include "far/tgt.h"
 #include "far/tok.h"
-#include "far/trans.h"
 #include <stdio.h>
 
 struct far
@@ -21,13 +19,12 @@ struct far
     char error[FAR_ERROR_SIZE];
 };
 
-#define far_DECLARE(name, fd)                                                  \
+#define FAR_DECLARE(name, fd)                                                  \
     struct far name;                                                           \
     far_init(&name, fd)
 
 FAR_API void far_init(struct far *far, FILE *restrict fd);
-FAR_API enum far_rc far_next_prof(struct far *far, struct far_prof *prof);
-FAR_API enum far_rc far_next_node(struct far *far, struct far_prof *prof);
+FAR_API enum far_rc far_next_tgt(struct far *far, struct far_tgt *prof);
 FAR_API void far_clear_error(struct far *far);
 
 #endif

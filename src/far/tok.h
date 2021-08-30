@@ -5,11 +5,9 @@
 
 enum far_tok_id
 {
-    FAR_TOK_NEWLINE = 0,
+    FAR_TOK_NL,
+    FAR_TOK_ID,
     FAR_TOK_WORD,
-    FAR_TOK_HMM,
-    FAR_TOK_COMPO,
-    FAR_TOK_SLASH,
     FAR_TOK_EOF,
 };
 

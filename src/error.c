@@ -2,7 +2,7 @@
 #include "aux.h"
 #include "bug.h"
 #include "far/aux.h"
-#include "far/prof.h"
+#include "far/tgt.h"
 #include "far/tok.h"
 #include <stdarg.h>
 #include <string.h>
@@ -45,7 +45,7 @@ enum far_rc error_runtime(char *dst, char const *fmt, ...)
     return FAR_RUNTIMEERROR;
 }
 
-enum far_rc __error_parse_prof(struct far_prof *prof, char const *fmt, ...)
+enum far_rc __error_parse_prof(struct far_tgt *prof, char const *fmt, ...)
 {
     int n = copy_fmt(FAR_ERROR_SIZE, prof->error, PARSE_ERROR);
     va_list ap;
