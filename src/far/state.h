@@ -1,0 +1,22 @@
+#ifndef FAR_STATE_H
+#define FAR_STATE_H
+
+enum far_state
+{
+    FAR_FSM_BEGIN = 0,
+    FAR_FSM_HEADER,
+    FAR_FSM_NAME,
+    FAR_FSM_CONTENT,
+    FAR_FSM_SYMBOL,
+    FAR_FSM_ARROW,
+    FAR_FSM_COMPO,
+    FAR_FSM_INSERT,
+    FAR_FSM_MATCH,
+    FAR_FSM_TRANS,
+    FAR_FSM_PAUSE,
+    FAR_FSM_SLASHED,
+    FAR_FSM_END,
+    FAR_FSM_ERROR
+};
+
+#endif
