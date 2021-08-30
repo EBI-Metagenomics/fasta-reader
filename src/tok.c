@@ -40,11 +40,11 @@ enum far_rc tok_next(struct far_tok *tok, FILE *restrict fd)
         }
         tok->value = strtok_r(tok->line.data, DELIM, &tok->line.ctx);
         tok->line.number++;
-
-        if (!tok->value) return FAR_PARSEERROR;
     }
     else
         tok->value = strtok_r(NULL, DELIM, &tok->line.ctx);
+
+    if (!tok->value) return FAR_PARSEERROR;
 
     if (!strcmp(tok->value, "\n"))
         tok->id = FAR_TOK_NL;

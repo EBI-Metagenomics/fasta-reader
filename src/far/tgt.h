@@ -7,7 +7,7 @@
 
 #define FAR_ID_MAX 64
 #define FAR_DESC_MAX 128
-#define FAR_SEQ_MAX (32 * 1024 * 1024)
+#define FAR_SEQ_MAX (1 * 1024 * 1024)
 
 struct far;
 

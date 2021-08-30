@@ -9,6 +9,7 @@
 #include "tok.h"
 #include <limits.h>
 #include <stdlib.h>
+#include <string.h>
 
 void far_tgt_dump(struct far_tgt const *tgt, FILE *restrict fd)
 {
@@ -35,10 +36,14 @@ enum far_rc tgt_next(struct far_tgt *tgt, FILE *restrict fd,
                      struct far_aux *aux, enum far_state *state,
                      struct far_tok *tok)
 {
+    if (*state == FAR_FSM_END) return FAR_ENDFILE;
+
     if (*state != FAR_FSM_BEGIN && *state != FAR_FSM_PAUSE)
         return error_runtime(tgt->error, "unexpected %s call", __func__);
 
     tgt_init(tgt, tok->error);
+    if (*state == FAR_FSM_PAUSE) strcpy(tgt->id, aux->id);
+
     do
     {
         enum far_rc rc = FAR_SUCCESS;
@@ -48,8 +53,6 @@ enum far_rc tgt_next(struct far_tgt *tgt, FILE *restrict fd,
             return FAR_PARSEERROR;
 
     } while (*state != FAR_FSM_PAUSE && *state != FAR_FSM_END);
-
-    if (*state == FAR_FSM_END) return FAR_ENDFILE;
 
     return FAR_SUCCESS;
 }

@@ -9,6 +9,7 @@ enum far_state
     FAR_FSM_SEQ_BEGIN,
     FAR_FSM_SEQ_NL,
     FAR_FSM_SEQ_CONT,
+    FAR_FSM_NL,
     FAR_FSM_PAUSE,
     FAR_FSM_END,
     FAR_FSM_ERROR
