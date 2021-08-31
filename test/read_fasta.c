@@ -1,17 +1,16 @@
 #include "far/far.h"
 #include "hope/hope.h"
 
-/* void test_read_empty(void); */
+void test_read_empty(void);
 void test_read_mix(void);
 
 int main(void)
 {
-    /* test_read_empty(); */
+    test_read_empty();
     test_read_mix();
     return hope_status();
 }
 
-#if 0
 void test_read_empty(void)
 {
     FILE *fd = fopen(ASSETS "/empty.faa", "r");
@@ -31,7 +30,6 @@ void test_read_empty(void)
 
     fclose(fd);
 }
-#endif
 
 void test_read_mix(void)
 {

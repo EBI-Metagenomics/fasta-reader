@@ -1,8 +1,8 @@
 #include "far/tgt.h"
 #include "aux.h"
-#include "bug.h"
 #include "error.h"
 #include "far/far.h"
+#include "far/state.h"
 #include "far/tok.h"
 #include "fsm.h"
 #include "tgt.h"
@@ -44,6 +44,7 @@ enum far_rc tgt_next(struct far_tgt *tgt, FILE *restrict fd,
     tgt_init(tgt, tok->error);
     if (*state == FAR_FSM_PAUSE) strcpy(tgt->id, aux->id);
 
+    enum far_state initial_state = *state;
     do
     {
         enum far_rc rc = FAR_SUCCESS;
@@ -53,6 +54,9 @@ enum far_rc tgt_next(struct far_tgt *tgt, FILE *restrict fd,
             return FAR_PARSEERROR;
 
     } while (*state != FAR_FSM_PAUSE && *state != FAR_FSM_END);
+
+    if (*state == FAR_FSM_END && initial_state == FAR_FSM_BEGIN)
+        return FAR_ENDFILE;
 
     return FAR_SUCCESS;
 }

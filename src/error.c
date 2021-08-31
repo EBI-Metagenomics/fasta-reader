@@ -1,9 +1,9 @@
 #include "error.h"
 #include "aux.h"
-#include "bug.h"
 #include "far/aux.h"
 #include "far/tgt.h"
 #include "far/tok.h"
+#include <assert.h>
 #include <stdarg.h>
 #include <string.h>
 
@@ -17,21 +17,24 @@ static int copy_fmt(int dst_size, char *dst, char const *fmt, ...)
     va_start(ap, fmt);
     int n = vsnprintf(dst, dst_size, fmt, ap);
     va_end(ap);
-    BUG(n < 0);
+    assert(n >= 0);
     return n;
 }
 
 static int copy_ap(int dst_size, char *dst, char const *fmt, va_list ap)
 {
     int n = vsnprintf(dst, dst_size, fmt, ap);
-    BUG(n < 0);
+    assert(n >= 0);
     return n;
 }
+
+#define unused(x) ((void)(x))
 
 enum far_rc error_io(char *dst, int errnum)
 {
     int rc = strerror_r(errnum, dst, FAR_ERROR_SIZE);
-    BUG(rc);
+    assert(!rc);
+    unused(rc);
     return FAR_IOERROR;
 }
 

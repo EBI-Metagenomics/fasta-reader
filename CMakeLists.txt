@@ -15,15 +15,7 @@ if("${isSystemDir}" STREQUAL "-1")
   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 endif()
 
-add_library(
-  far
-  src/aux.c
-  src/bug.c
-  src/error.c
-  src/far.c
-  src/fsm.c
-  src/tgt.c
-  src/tok.c)
+add_library(far src/aux.c src/error.c src/far.c src/fsm.c src/tgt.c src/tok.c)
 add_library(FAR::far ALIAS far)
 
 include(GenerateExportHeader)
