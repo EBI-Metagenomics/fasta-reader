@@ -18,6 +18,10 @@ endif()
 add_library(far src/aux.c src/error.c src/far.c src/fsm.c src/tgt.c src/tok.c)
 add_library(FAR::far ALIAS far)
 
+# Hide functions by default.
+set_property(TARGET far PROPERTY C_VISIBILITY_PRESET hidden)
+set_property(TARGET far PROPERTY VISIBILITY_INLINES_HIDDEN ON)
+
 include(GenerateExportHeader)
 generate_export_header(
   far
