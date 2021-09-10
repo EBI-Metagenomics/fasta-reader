@@ -15,7 +15,7 @@ static int copy_fmt(int dst_size, char *dst, char const *fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
-    int n = vsnprintf(dst, dst_size, fmt, ap);
+    int n = vsnprintf(dst, (size_t)dst_size, fmt, ap);
     va_end(ap);
     assert(n >= 0);
     return n;
@@ -23,7 +23,7 @@ static int copy_fmt(int dst_size, char *dst, char const *fmt, ...)
 
 static int copy_ap(int dst_size, char *dst, char const *fmt, va_list ap)
 {
-    int n = vsnprintf(dst, dst_size, fmt, ap);
+    int n = vsnprintf(dst, (size_t)dst_size, fmt, ap);
     assert(n >= 0);
     return n;
 }
