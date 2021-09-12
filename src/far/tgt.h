@@ -23,7 +23,8 @@ struct far_tgt
     struct far_tgt name;                                                       \
     far_tgt_init(&name, (far))
 
-FAR_API void far_tgt_dump(struct far_tgt const *tgt, FILE *restrict fd);
+FAR_API void far_tgt_write(char const *id, char const *desc, char const *seq,
+                           unsigned ncols, FILE *restrict fd);
 FAR_API void far_tgt_init(struct far_tgt *tgt, struct far *far);
 
 #endif

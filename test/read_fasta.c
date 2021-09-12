@@ -6,6 +6,7 @@ void test_read_mix(void);
 void test_read_damaged1(void);
 void test_read_damaged2(void);
 void test_read_damaged3(void);
+void test_write_mix(void);
 
 int main(void)
 {
@@ -14,6 +15,7 @@ int main(void)
     test_read_damaged1();
     test_read_damaged2();
     test_read_damaged3();
+    test_write_mix();
     return hope_status();
 }
 
@@ -37,30 +39,36 @@ void test_read_empty(void)
     fclose(fd);
 }
 
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
+
+static char *mix_id[] = {"LCBO", "MCHU", "gi|5524211|gb|AAD44166.1|",
+                         "gi|5524211|gb|AAD44166.1|"};
+
+static char *mix_desc[] = {
+    "- Prolactin precursor - Bovine",
+    "- Calmodulin - Human, rabbit, bovine, rat, and chicken",
+    "cytochrome b [Elephas maximus maximus]",
+    "cytochrome b [Elephas maximus maximus]"};
+
+static char *mix_seq[] = {
+    "MDSKGSSQKGSRLLLLLVVSNLLLCQGVVSTPVCPNGPGNCQVSLRDLFDRAVMVSHYI"
+    "HDLSSEMFNEFDKRYAQGKGFITMALNSCHTSSLPTPEDKEQAQQTHHEVLMSLILGLL"
+    "RSWNDPLYHLVTEVRGMKGAPDAILSRAIEIEEENKRLLEGMEMIFGQVIPGAKETEPY"
+    "PVWSGLPSLQTKDEDARYSAFYNLLHCLRRDSSKIDTYLKLLNCRIIYNNNC",
+    "MADQLTEEQIAEFKEAFSLFDKDGDGTITTKELGTVMRSLGQNPTEAELQDMINEVDAD"
+    "GNGTIDFPEFLTMMARKMKDTDSEEEIREAFRVFDKDGNGYISAAELRHVMTNLGEKLT"
+    "DEEVDEMIREADIDGDGQVNYEEFVQMMTAK*",
+    "LCLYTHIGRNIYYGSYLYSETWNTGIMLLLITMATAFMGYVLPWGQMSFWGATVITNLFSAIPYIGTNLV"
+    "EWIWGGFSVDKATLNRFFAFHFILPFTMVALAGVHLTFLHETGSNNPLGLTSDSDKIPFHPYYTIKDFLG"
+    "LLILILLLLLLALLSPDMLGDPDNHMPADPLNTPLHIKPEWYFLFAYAILRSVPNKLGGVLALFLSIVIL"
+    "GLMPFLHTSKHRSMMLRPLSQALFWTLTMDLLTLTWIGSQPVEYPYTIIGQMASILYFSIILAFLPIAGX"
+    "IENY",
+    "LCLYTHIGRNIYYGSYLYSETWNTGIMLLLITMATAFMGYVLPWGQMSFWGATVITNLFSAIPYIGT"};
+
 void test_read_mix(void)
 {
     FILE *fd = fopen(ASSETS "/mix.faa", "r");
     NOTNULL(fd);
-    char *id[] = {"LCBO", "MCHU", "gi|5524211|gb|AAD44166.1|",
-                  "gi|5524211|gb|AAD44166.1|"};
-    char *desc[] = {"- Prolactin precursor - Bovine",
-                    "- Calmodulin - Human, rabbit, bovine, rat, and chicken",
-                    "cytochrome b [Elephas maximus maximus]",
-                    "cytochrome b [Elephas maximus maximus]"};
-    char *seq[] = {
-        "MDSKGSSQKGSRLLLLLVVSNLLLCQGVVSTPVCPNGPGNCQVSLRDLFDRAVMVSHYI"
-        "HDLSSEMFNEFDKRYAQGKGFITMALNSCHTSSLPTPEDKEQAQQTHHEVLMSLILGLL"
-        "RSWNDPLYHLVTEVRGMKGAPDAILSRAIEIEEENKRLLEGMEMIFGQVIPGAKETEPY"
-        "PVWSGLPSLQTKDEDARYSAFYNLLHCLRRDSSKIDTYLKLLNCRIIYNNNC",
-        "MADQLTEEQIAEFKEAFSLFDKDGDGTITTKELGTVMRSLGQNPTEAELQDMINEVDAD"
-        "GNGTIDFPEFLTMMARKMKDTDSEEEIREAFRVFDKDGNGYISAAELRHVMTNLGEKLT"
-        "DEEVDEMIREADIDGDGQVNYEEFVQMMTAK*",
-        "LCLYTHIGRNIYYGSYLYSETWNTGIMLLLITMATAFMGYVLPWGQMSFWGATVITNLFSAIPYIGTNLV"
-        "EWIWGGFSVDKATLNRFFAFHFILPFTMVALAGVHLTFLHETGSNNPLGLTSDSDKIPFHPYYTIKDFLG"
-        "LLILILLLLLLALLSPDMLGDPDNHMPADPLNTPLHIKPEWYFLFAYAILRSVPNKLGGVLALFLSIVIL"
-        "GLMPFLHTSKHRSMMLRPLSQALFWTLTMDLLTLTWIGSQPVEYPYTIIGQMASILYFSIILAFLPIAGX"
-        "IENY",
-        "LCLYTHIGRNIYYGSYLYSETWNTGIMLLLITMATAFMGYVLPWGQMSFWGATVITNLFSAIPYIGT"};
 
     FAR_DECLARE(far, fd);
     FAR_TGT_DECLARE(tgt, &far);
@@ -69,9 +77,9 @@ void test_read_mix(void)
     enum far_rc rc = FAR_SUCCESS;
     while (!(rc = far_next_tgt(&far, &tgt)))
     {
-        EQ(tgt.id, id[i]);
-        EQ(tgt.desc, desc[i]);
-        EQ(tgt.seq, seq[i]);
+        EQ(tgt.id, mix_id[i]);
+        EQ(tgt.desc, mix_desc[i]);
+        EQ(tgt.seq, mix_seq[i]);
         i++;
     }
     EQ(i, 4);
@@ -147,4 +155,15 @@ void test_read_damaged3(void)
     EQ(far.error, "");
 
     fclose(fd);
+}
+
+void test_write_mix(void)
+{
+    FAR_DECLARE(far, NULL);
+    FAR_TGT_DECLARE(tgt, &far);
+
+    for (unsigned i = 0; i < ARRAY_SIZE(mix_id); ++i)
+    {
+        far_tgt_write(mix_id[i], mix_desc[i], mix_seq[i], 60, stdout);
+    }
 }

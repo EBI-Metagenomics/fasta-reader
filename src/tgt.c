@@ -11,12 +11,21 @@
 #include <stdlib.h>
 #include <string.h>
 
-void far_tgt_dump(struct far_tgt const *tgt, FILE *restrict fd)
+void far_tgt_write(char const *id, char const *desc, char const *seq,
+                   unsigned ncols, FILE *restrict fd)
 {
-    fprintf(fd, "ID: %s\n", tgt->id);
-    fprintf(fd, "  Desc: %s\n", tgt->desc);
-    fprintf(fd, "   Seq: %s\n", tgt->seq);
-    fprintf(fd, "\n");
+    fprintf(fd, ">%s", id);
+    if (desc[0]) fprintf(fd, " %s", desc);
+
+    for (char const *c = seq; *c; ++c)
+    {
+        if (((c - seq) % ncols) == 0)
+        {
+            fputc('\n', fd);
+        }
+        fputc(*c, fd);
+    }
+    fputc('\n', fd);
 }
 
 void far_tgt_init(struct far_tgt *tgt, struct far *far)
