@@ -3,7 +3,7 @@
 
 #include "tgt.h"
 
-struct far_aux
+struct fasta_aux
 {
     char *begin;
     char *pos;

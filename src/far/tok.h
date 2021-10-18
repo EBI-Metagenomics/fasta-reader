@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-enum far_tok_id
+enum fasta_tok_id
 {
     FAR_TOK_NL,
     FAR_TOK_ID,
@@ -13,9 +13,9 @@ enum far_tok_id
 
 #define FAR_TOK_LINE_MAX 256
 
-struct far_tok
+struct fasta_tok
 {
-    enum far_tok_id id;
+    enum fasta_tok_id id;
     char const *value;
     struct
     {

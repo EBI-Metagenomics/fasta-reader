@@ -3,17 +3,18 @@
 #include "tgt.h"
 #include "tok.h"
 
-void far_init(struct far *far, FILE *restrict fd)
+void fasta_init(struct fasta *fa, FILE *restrict fd, enum fasta_mode mode)
 {
-    far->fd = fd;
-    fsm_init(&far->state);
-    far->error[0] = '\0';
-    tok_init(&far->tok, far->error);
+    fa->fd = fd;
+    fa->mode = mode;
+    fsm_init(&fa->state);
+    fa->error[0] = '\0';
+    tok_init(&fa->tok, fa->error);
 }
 
-enum far_rc far_next_tgt(struct far *far, struct far_tgt *tgt)
+enum fasta_rc fasta_next_target(struct fasta *fa, struct fasta_target *tgt)
 {
-    return tgt_next(tgt, far->fd, &far->aux, &far->state, &far->tok);
+    return target_next(tgt, fa->fd, &fa->aux, &fa->state, &fa->tok);
 }
 
-void far_clear_error(struct far *far) { far->error[0] = '\0'; }
+void fasta_clear_error(struct fasta *fa) { fa->error[0] = '\0'; }

@@ -4,15 +4,15 @@
 #include "far/rc.h"
 #include <stdio.h>
 
-enum far_state;
-struct far_aux;
-struct far_tgt;
-struct far_tok;
+enum state;
+struct fasta_aux;
+struct fasta_target;
+struct fasta_tok;
 
-void tgt_init(struct far_tgt *tgt, char *error);
+void target_init(struct fasta_target *tgt, char *error);
 
-enum far_rc tgt_next(struct far_tgt *tgt, FILE *restrict fd,
-                     struct far_aux *aux, enum far_state *state,
-                     struct far_tok *tok);
+enum fasta_rc target_next(struct fasta_target *tgt, FILE *restrict fd,
+                          struct fasta_aux *aux, enum state *state,
+                          struct fasta_tok *tok);
 
 #endif

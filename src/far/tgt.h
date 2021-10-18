@@ -9,22 +9,25 @@
 #define FAR_DESC_MAX 128
 #define FAR_SEQ_MAX (1024 * 1024)
 
-struct far;
+struct fasta;
 
-struct far_tgt
+struct fasta_target
 {
-    char id[FAR_ID_MAX];
-    char desc[FAR_DESC_MAX];
-    char seq[FAR_SEQ_MAX];
+    char *id;
+    char *desc;
+    char *seq;
     char *error;
-};
 
-#define FAR_TGT_DECLARE(name, far)                                             \
-    struct far_tgt name;                                                       \
-    far_tgt_init(&name, (far))
+    struct
+    {
+        char id[FAR_ID_MAX];
+        char desc[FAR_DESC_MAX];
+        char seq[FAR_SEQ_MAX];
+    } buf;
+};
 
 FAR_API void far_tgt_write(char const *id, char const *desc, char const *seq,
                            unsigned ncols, FILE *restrict fd);
-FAR_API void far_tgt_init(struct far_tgt *tgt, struct far *far);
+FAR_API void fasta_target_init(struct fasta_target *tgt, struct fasta *far);
 
 #endif

@@ -5,26 +5,30 @@
 #include "far/error.h"
 #include "far/export.h"
 #include "far/rc.h"
-#include "far/state.h"
 #include "far/tgt.h"
 #include "far/tok.h"
 #include <stdio.h>
 
-struct far
+enum fasta_mode
+{
+    FASTA_READ,
+    FASTA_WRITE,
+};
+
+struct fasta
 {
     FILE *restrict fd;
-    enum far_state state;
-    struct far_tok tok;
-    struct far_aux aux;
+    enum fasta_mode mode;
+    unsigned state;
+    struct fasta_tok tok;
+    struct fasta_aux aux;
     char error[FAR_ERROR_SIZE];
 };
 
-#define FAR_DECLARE(name, fd)                                                  \
-    struct far name;                                                           \
-    far_init(&name, fd)
-
-FAR_API void far_init(struct far *far, FILE *restrict fd);
-FAR_API enum far_rc far_next_tgt(struct far *far, struct far_tgt *prof);
-FAR_API void far_clear_error(struct far *far);
+FAR_API void fasta_init(struct fasta *fa, FILE *restrict fd,
+                        enum fasta_mode mode);
+FAR_API enum fasta_rc fasta_next_target(struct fasta *fa,
+                                        struct fasta_target *tgt);
+FAR_API void fasta_clear_error(struct fasta *fa);
 
 #endif

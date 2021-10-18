@@ -2,9 +2,9 @@
 #include "aux.h"
 #include "error.h"
 #include "far/far.h"
-#include "far/state.h"
 #include "far/tok.h"
 #include "fsm.h"
+#include "state.h"
 #include "tgt.h"
 #include "tok.h"
 #include <limits.h>
@@ -28,44 +28,46 @@ void far_tgt_write(char const *id, char const *desc, char const *seq,
     fputc('\n', fd);
 }
 
-void far_tgt_init(struct far_tgt *tgt, struct far *far)
+static void buf_init(struct fasta_target *tgt)
 {
-    tgt_init(tgt, far->error);
+    tgt->buf.id[0] = '\0';
+    tgt->buf.desc[0] = '\0';
+    tgt->buf.seq[0] = '\0';
 }
 
-void tgt_init(struct far_tgt *tgt, char *error)
+void fasta_target_init(struct fasta_target *tgt, struct fasta *fa)
 {
-    tgt->id[0] = '\0';
-    tgt->desc[0] = '\0';
-    tgt->seq[0] = '\0';
-    tgt->error = error;
+    buf_init(tgt);
+    tgt->id = tgt->buf.id;
+    tgt->desc = tgt->buf.desc;
+    tgt->seq = tgt->buf.seq;
+    tgt->error = fa->error;
 }
 
-enum far_rc tgt_next(struct far_tgt *tgt, FILE *restrict fd,
-                     struct far_aux *aux, enum far_state *state,
-                     struct far_tok *tok)
+enum fasta_rc target_next(struct fasta_target *tgt, FILE *restrict fd,
+                          struct fasta_aux *aux, enum state *state,
+                          struct fasta_tok *tok)
 {
-    if (*state == FAR_FSM_END) return FAR_ENDFILE;
+    if (*state == STATE_END) return FAR_ENDFILE;
 
-    if (*state != FAR_FSM_BEGIN && *state != FAR_FSM_PAUSE)
+    if (*state != STATE_BEGIN && *state != STATE_PAUSE)
         return error_runtime(tgt->error, "unexpected %s call", __func__);
 
-    tgt_init(tgt, tok->error);
-    if (*state == FAR_FSM_PAUSE) strcpy(tgt->id, aux->id);
+    buf_init(tgt);
+    if (*state == STATE_PAUSE) strcpy(tgt->id, aux->id);
 
-    enum far_state initial_state = *state;
+    enum state initial_state = *state;
     do
     {
-        enum far_rc rc = FAR_SUCCESS;
+        enum fasta_rc rc = FAR_SUCCESS;
         if ((rc = tok_next(tok, fd))) return rc;
 
-        if ((*state = fsm_next(*state, tok, aux, tgt)) == FAR_FSM_ERROR)
+        if ((*state = fsm_next(*state, tok, aux, tgt)) == STATE_ERROR)
             return FAR_PARSEERROR;
 
-    } while (*state != FAR_FSM_PAUSE && *state != FAR_FSM_END);
+    } while (*state != STATE_PAUSE && *state != STATE_END);
 
-    if (*state == FAR_FSM_END && initial_state == FAR_FSM_BEGIN)
-        return FAR_ENDFILE;
+    if (*state == STATE_END && initial_state == STATE_BEGIN) return FAR_ENDFILE;
 
     return FAR_SUCCESS;
 }

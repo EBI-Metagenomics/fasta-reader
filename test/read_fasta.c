@@ -24,12 +24,14 @@ void test_read_empty(void)
     FILE *fd = fopen(ASSETS "/empty.faa", "r");
     NOTNULL(fd);
 
-    FAR_DECLARE(far, fd);
-    FAR_TGT_DECLARE(tgt, &far);
+    struct fasta fa;
+    fasta_init(&fa, fd, FASTA_READ);
+    struct fasta_target tgt;
+    fasta_target_init(&tgt, &fa);
 
     unsigned i = 0;
-    enum far_rc rc = FAR_SUCCESS;
-    while (!(rc = far_next_tgt(&far, &tgt)))
+    enum fasta_rc rc = FAR_SUCCESS;
+    while (!(rc = fasta_next_target(&fa, &tgt)))
     {
         i++;
     }
@@ -70,12 +72,14 @@ void test_read_mix(void)
     FILE *fd = fopen(ASSETS "/mix.faa", "r");
     NOTNULL(fd);
 
-    FAR_DECLARE(far, fd);
-    FAR_TGT_DECLARE(tgt, &far);
+    struct fasta fa;
+    fasta_init(&fa, fd, FASTA_READ);
+    struct fasta_target tgt;
+    fasta_target_init(&tgt, &fa);
 
     unsigned i = 0;
-    enum far_rc rc = FAR_SUCCESS;
-    while (!(rc = far_next_tgt(&far, &tgt)))
+    enum fasta_rc rc = FAR_SUCCESS;
+    while (!(rc = fasta_next_target(&fa, &tgt)))
     {
         EQ(tgt.id, mix_id[i]);
         EQ(tgt.desc, mix_desc[i]);
@@ -93,20 +97,22 @@ void test_read_damaged1(void)
     FILE *fd = fopen(ASSETS "/damaged1.faa", "r");
     NOTNULL(fd);
 
-    FAR_DECLARE(far, fd);
-    FAR_TGT_DECLARE(tgt, &far);
+    struct fasta fa;
+    fasta_init(&fa, fd, FASTA_READ);
+    struct fasta_target tgt;
+    fasta_target_init(&tgt, &fa);
 
     unsigned i = 0;
-    enum far_rc rc = FAR_SUCCESS;
-    while (!(rc = far_next_tgt(&far, &tgt)))
+    enum fasta_rc rc = FAR_SUCCESS;
+    while (!(rc = fasta_next_target(&fa, &tgt)))
     {
         i++;
     }
     EQ(i, 0);
     EQ(rc, FAR_PARSEERROR);
-    EQ(far.error, "Parse error: unexpected token: line 1");
-    far_clear_error(&far);
-    EQ(far.error, "");
+    EQ(fa.error, "Parse error: unexpected token: line 1");
+    fasta_clear_error(&fa);
+    EQ(fa.error, "");
 
     fclose(fd);
 }
@@ -116,20 +122,22 @@ void test_read_damaged2(void)
     FILE *fd = fopen(ASSETS "/damaged2.faa", "r");
     NOTNULL(fd);
 
-    FAR_DECLARE(far, fd);
-    FAR_TGT_DECLARE(tgt, &far);
+    struct fasta fa;
+    fasta_init(&fa, fd, FASTA_READ);
+    struct fasta_target tgt;
+    fasta_target_init(&tgt, &fa);
 
     unsigned i = 0;
-    enum far_rc rc = FAR_SUCCESS;
-    while (!(rc = far_next_tgt(&far, &tgt)))
+    enum fasta_rc rc = FAR_SUCCESS;
+    while (!(rc = fasta_next_target(&fa, &tgt)))
     {
         i++;
     }
     EQ(i, 0);
     EQ(rc, FAR_PARSEERROR);
-    EQ(far.error, "Parse error: unexpected id: line 2");
-    far_clear_error(&far);
-    EQ(far.error, "");
+    EQ(fa.error, "Parse error: unexpected id: line 2");
+    fasta_clear_error(&fa);
+    EQ(fa.error, "");
 
     fclose(fd);
 }
@@ -139,28 +147,32 @@ void test_read_damaged3(void)
     FILE *fd = fopen(ASSETS "/damaged3.faa", "r");
     NOTNULL(fd);
 
-    FAR_DECLARE(far, fd);
-    FAR_TGT_DECLARE(tgt, &far);
+    struct fasta fa;
+    fasta_init(&fa, fd, FASTA_READ);
+    struct fasta_target tgt;
+    fasta_target_init(&tgt, &fa);
 
     unsigned i = 0;
-    enum far_rc rc = FAR_SUCCESS;
-    while (!(rc = far_next_tgt(&far, &tgt)))
+    enum fasta_rc rc = FAR_SUCCESS;
+    while (!(rc = fasta_next_target(&fa, &tgt)))
     {
         i++;
     }
     EQ(i, 0);
     EQ(rc, FAR_PARSEERROR);
-    EQ(far.error, "Parse error: unexpected token: line 4");
-    far_clear_error(&far);
-    EQ(far.error, "");
+    EQ(fa.error, "Parse error: unexpected token: line 4");
+    fasta_clear_error(&fa);
+    EQ(fa.error, "");
 
     fclose(fd);
 }
 
 void test_write_mix(void)
 {
-    FAR_DECLARE(far, NULL);
-    FAR_TGT_DECLARE(tgt, &far);
+    struct fasta fa;
+    fasta_init(&fa, NULL, FASTA_WRITE);
+    struct fasta_target tgt;
+    fasta_target_init(&tgt, &fa);
 
     for (unsigned i = 0; i < ARRAY_SIZE(mix_id); ++i)
     {

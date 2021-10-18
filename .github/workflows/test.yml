@@ -1,13 +1,12 @@
-name: CMake
+name: Test
 
 on: push
 
 env:
-  BUILD_TYPE: Debug
+  BUILD_TYPE: Release
 
 jobs:
   test:
-    name: Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -16,15 +15,27 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Check for sudo
+      shell: bash
+      run: |
+        if type sudo >/dev/null 2>&1; then SUDO="sudo"; else SUDO=""; fi
+        echo "SUDO=$SUDO" >> $GITHUB_ENV
+
     - name: Install dependencies
-      run: sudo ./install-deps
+      shell: bash
+      run: if [ -f install-deps ]; then $SUDO ./install-deps; fi
 
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCI_BUILD=ON
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      run: ctest -C ${{env.BUILD_TYPE}} --rerun-failed --output-on-failure
+      run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
+
+    - name: Install
+      working-directory: ${{github.workspace}}/build
+      shell: bash
+      run: $SUDO cmake --build . --target install --config $BUILD_TYPE

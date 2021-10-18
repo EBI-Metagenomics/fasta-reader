@@ -30,7 +30,7 @@ static int copy_ap(int dst_size, char *dst, char const *fmt, va_list ap)
 
 #define unused(x) ((void)(x))
 
-enum far_rc error_io(char *dst, int errnum)
+enum fasta_rc error_io(char *dst, int errnum)
 {
     int rc = strerror_r(errnum, dst, FAR_ERROR_SIZE);
     assert(!rc);
@@ -38,7 +38,7 @@ enum far_rc error_io(char *dst, int errnum)
     return FAR_IOERROR;
 }
 
-enum far_rc error_runtime(char *dst, char const *fmt, ...)
+enum fasta_rc error_runtime(char *dst, char const *fmt, ...)
 {
     int n = copy_fmt(FAR_ERROR_SIZE, dst, RUNTIME_ERROR);
     va_list ap;
@@ -48,17 +48,18 @@ enum far_rc error_runtime(char *dst, char const *fmt, ...)
     return FAR_RUNTIMEERROR;
 }
 
-enum far_rc __error_parse_prof(struct far_tgt *prof, char const *fmt, ...)
+enum fasta_rc __error_parse_target(struct fasta_target *tgt, char const *fmt,
+                                   ...)
 {
-    int n = copy_fmt(FAR_ERROR_SIZE, prof->error, PARSE_ERROR);
+    int n = copy_fmt(FAR_ERROR_SIZE, tgt->error, PARSE_ERROR);
     va_list ap;
     va_start(ap, fmt);
-    copy_fmt(FAR_ERROR_SIZE - n, prof->error + n, fmt, ap);
+    copy_fmt(FAR_ERROR_SIZE - n, tgt->error + n, fmt, ap);
     va_end(ap);
     return FAR_PARSEERROR;
 }
 
-enum far_rc __error_parse_tok(struct far_tok *tok, char const *fmt, ...)
+enum fasta_rc __error_parse_tok(struct fasta_tok *tok, char const *fmt, ...)
 {
     int n = copy_fmt(FAR_ERROR_SIZE, tok->error, PARSE_ERROR);
     va_list ap;

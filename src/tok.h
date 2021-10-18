@@ -4,9 +4,9 @@
 #include "far/rc.h"
 #include <stdio.h>
 
-struct far_tok;
+struct fasta_tok;
 
-void tok_init(struct far_tok *tok, char *error);
-enum far_rc tok_next(struct far_tok *tok, FILE *restrict fd);
+void tok_init(struct fasta_tok *tok, char *error);
+enum fasta_rc tok_next(struct fasta_tok *tok, FILE *restrict fd);
 
 #endif

@@ -2,7 +2,7 @@
 #include "far/aux.h"
 #include <stdlib.h>
 
-void aux_init(struct far_aux *aux)
+void aux_init(struct fasta_aux *aux)
 {
     aux->begin = NULL;
     aux->pos = NULL;

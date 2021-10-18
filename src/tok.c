@@ -7,10 +7,10 @@
 #define DELIM " \t\r"
 
 static void add_space_before_newline(char line[FAR_TOK_LINE_MAX]);
-static enum far_rc next_line(FILE *restrict fd, char error[FAR_ERROR_SIZE],
-                             char line[FAR_TOK_LINE_MAX]);
+static enum fasta_rc next_line(FILE *restrict fd, char error[FAR_ERROR_SIZE],
+                               char line[FAR_TOK_LINE_MAX]);
 
-void tok_init(struct far_tok *tok, char *error)
+void tok_init(struct fasta_tok *tok, char *error)
 {
     tok->id = FAR_TOK_NL;
     tok->value = tok->line.data;
@@ -21,9 +21,9 @@ void tok_init(struct far_tok *tok, char *error)
     tok->error = error;
 }
 
-enum far_rc tok_next(struct far_tok *tok, FILE *restrict fd)
+enum fasta_rc tok_next(struct fasta_tok *tok, FILE *restrict fd)
 {
-    enum far_rc rc = FAR_SUCCESS;
+    enum fasta_rc rc = FAR_SUCCESS;
 
     if (tok->line.consumed)
     {
@@ -58,8 +58,8 @@ enum far_rc tok_next(struct far_tok *tok, FILE *restrict fd)
     return FAR_SUCCESS;
 }
 
-static enum far_rc next_line(FILE *restrict fd, char error[FAR_ERROR_SIZE],
-                             char line[FAR_TOK_LINE_MAX])
+static enum fasta_rc next_line(FILE *restrict fd, char error[FAR_ERROR_SIZE],
+                               char line[FAR_TOK_LINE_MAX])
 {
     if (!fgets(line, FAR_TOK_LINE_MAX - 1, fd))
     {

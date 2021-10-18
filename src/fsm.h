@@ -1,17 +1,17 @@
 #ifndef FSM_H
 #define FSM_H
 
-#include "far/state.h"
+#include "state.h"
 
-struct far_aux;
-struct far_tgt;
-struct far_tok;
+struct fasta_aux;
+struct fasta_target;
+struct fasta_tok;
 
-static inline void fsm_init(enum far_state *state) { *state = FAR_FSM_BEGIN; }
+static inline void fsm_init(enum state *state) { *state = STATE_BEGIN; }
 
-enum far_state fsm_next(enum far_state state, struct far_tok *tok,
-                        struct far_aux *aux, struct far_tgt *prof);
+enum state fsm_next(enum state state, struct fasta_tok *tok,
+                    struct fasta_aux *aux, struct fasta_target *tgt);
 
-char const *fsm_name(enum far_state state);
+char const *fsm_name(enum state state);
 
 #endif
